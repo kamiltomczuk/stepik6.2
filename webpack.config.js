@@ -1,24 +1,22 @@
 var path = require("path");
-const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: "./src/index.js",
   output: {
     path: path.join(__dirname, "dist", "assets"),
     filename: "bundle.js",
+    publicPath: "/dist/",
   },
-
-  plugins: [
-    new HTMLWebpackPlugin({
-      template: "./src/index.html",
-    }),
-  ],
-
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "/"),
+    },
+  },
   module: {
     rules: [
       {
-        test: /.js$/,
-        exclude: /node_modules/,
+        test: /\.js$/,
+        exclude: /(node_modules)/,
         use: {
           loader: "babel-loader",
           options: {
@@ -26,6 +24,11 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
+  devtool: "eval-source-map", // Add this option for source mapping
 };
